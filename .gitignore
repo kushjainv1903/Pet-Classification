@@ -1,0 +1,32 @@
+# Local data and generated artifacts
+data/
+models/
+output/
+outputs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Large or generated ML files
+*.keras
+*.h5
+*.tflite
+*.png
+*.mat
+._*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
