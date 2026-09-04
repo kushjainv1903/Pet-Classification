@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import json
 import random
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
 
 import tensorflow as tf
-
 
 AUTOTUNE = tf.data.AUTOTUNE
 DEFAULT_DATA_DIR = Path("data/oxford-iiit-pet")
@@ -96,7 +95,7 @@ def split_train_val(
     for label in sorted(buckets):
         shuffled = list(buckets[label])
         random.Random(seed + label).shuffle(shuffled)
-        val_count = max(1, int(round(len(shuffled) * val_fraction)))
+        val_count = max(1, round(len(shuffled) * val_fraction))
         val_items.extend(shuffled[:val_count])
         train_items.extend(shuffled[val_count:])
 

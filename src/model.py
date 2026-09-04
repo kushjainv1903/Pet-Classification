@@ -3,7 +3,6 @@ from __future__ import annotations
 import tensorflow as tf
 from tensorflow.keras import layers
 
-
 BACKBONES = {
     "efficientnetb0": tf.keras.applications.EfficientNetB0,
     "mobilenetv2": tf.keras.applications.MobileNetV2,
