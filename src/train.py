@@ -11,13 +11,13 @@ from src.model import build_model, compile_model, unfreeze_backbone
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Train an Oxford-IIIT Pet breed classifier.")
-    parser.add_argument("--data-dir", default="data/oxford-iiit-pet", help="Oxford-IIIT Pet dataset directory.")
+    parser = argparse.ArgumentParser(description="Train the unified pet breed classifier.")
+    parser.add_argument("--data-dir", default="data", help="Root directory containing stanford-dog and oxford-cat.")
     parser.add_argument("--epochs", type=int, default=20, help="Total training epochs.")
     parser.add_argument("--fine-tune-epochs", type=int, default=5, help="Fine-tuning epochs after head training.")
     parser.add_argument("--batch-size", type=int, default=32, help="Batch size.")
     parser.add_argument("--img-size", type=int, default=224, help="Square image size.")
-    parser.add_argument("--backbone", default="efficientnetb0", choices=["efficientnetb0", "mobilenetv2"])
+    parser.add_argument("--backbone", default="efficientnetb0", choices=["efficientnetb0", "mobilenetv2", "resnet50"])
     parser.add_argument("--model-dir", default="models", help="Directory for saved models and labels.")
     parser.add_argument("--output-dir", default="output", help="Directory for plots and reports.")
     parser.add_argument("--seed", type=int, default=42, help="Random seed.")
