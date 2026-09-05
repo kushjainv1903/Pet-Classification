@@ -91,6 +91,22 @@ def is_readable_image(path: Path) -> bool:
         return False
 
 
+def is_tensorflow_decodable(path: Path) -> bool:
+    """Validate that TensorFlow can decode the image file.
+
+    This uses TensorFlow's actual image decoder to ensure images that pass
+    through build_manifest() will not cause decoding errors during training.
+    """
+    try:
+        image_bytes = tf.io.read_file(str(path))
+        decoded = tf.image.decode_image(image_bytes, channels=3, expand_animations=False)
+        # Force evaluation to catch any decoding errors
+        _ = decoded.shape
+        return True
+    except (tf.errors.InvalidArgumentError, tf.errors.OutOfRangeError):
+        return False
+
+
 def discover_class_directories(data_dir: str | Path = DEFAULT_DATA_DIR) -> list[tuple[str, str, Path]]:
     root = Path(data_dir)
     dog_root = root / "stanford-dog" / "Images"
@@ -147,6 +163,9 @@ def build_manifest(
         )
         for image_path in image_paths:
             if validate_images and not is_readable_image(image_path):
+                skipped_images += 1
+                continue
+            if validate_images and not is_tensorflow_decodable(image_path):
                 skipped_images += 1
                 continue
             records.append(
@@ -326,7 +345,7 @@ def save_label_mapping(class_mapping: Iterable[ClassMappingEntry], path: str | P
 def load_label_mapping(path: str | Path) -> list[ClassMappingEntry]:
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(payload, list):
-        raise ValueError("labels.json must contain a list")
+        raise ValueError("labels.json must contain a list")  # noqa: TRY004
 
     entries: list[ClassMappingEntry] = []
     for item in payload:
